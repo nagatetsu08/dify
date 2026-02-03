@@ -1,0 +1,340 @@
+app:
+  description: 画像からデータを抽出する機能
+  icon: 🤖
+  icon_background: '#E4FBCC'
+  mode: workflow
+  name: 画像認識ワークフロー
+  use_icon_as_answer_icon: false
+dependencies:
+- current_identifier: null
+  type: marketplace
+  value:
+    marketplace_plugin_unique_identifier: langgenius/gemini:0.7.4@5faf411e694e0da130a337347a625a3812b1b7502a0183382d66d92c841bf05a
+    version: null
+kind: app
+version: 0.5.0
+workflow:
+  conversation_variables: []
+  environment_variables: []
+  features:
+    file_upload:
+      allowed_file_extensions:
+      - .JPG
+      - .JPEG
+      - .PNG
+      - .GIF
+      - .WEBP
+      - .SVG
+      allowed_file_types:
+      - image
+      allowed_file_upload_methods:
+      - local_file
+      - remote_url
+      enabled: false
+      fileUploadConfig:
+        attachment_image_file_size_limit: 2
+        audio_file_size_limit: 50
+        batch_count_limit: 5
+        file_size_limit: 15
+        file_upload_limit: 20
+        image_file_batch_limit: 10
+        image_file_size_limit: 10
+        single_chunk_attachment_limit: 10
+        video_file_size_limit: 100
+        workflow_file_upload_limit: 10
+      image:
+        enabled: false
+        number_limits: 3
+        transfer_methods:
+        - local_file
+        - remote_url
+      number_limits: 3
+    opening_statement: ''
+    retriever_resource:
+      enabled: true
+    sensitive_word_avoidance:
+      enabled: false
+    speech_to_text:
+      enabled: false
+    suggested_questions: []
+    suggested_questions_after_answer:
+      enabled: false
+    text_to_speech:
+      enabled: false
+      language: ''
+      voice: ''
+  graph:
+    edges:
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: start
+        targetType: llm
+      id: 1769955924804-source-1769956037851-target
+      selected: false
+      source: '1769955924804'
+      sourceHandle: source
+      target: '1769956037851'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: llm
+        targetType: code
+      id: 1769956037851-source-1769962718518-target
+      selected: false
+      source: '1769956037851'
+      sourceHandle: source
+      target: '1769962718518'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: code
+        targetType: http-request
+      id: 1769962718518-source-1770125405741-target
+      selected: false
+      source: '1769962718518'
+      sourceHandle: source
+      target: '1770125405741'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    nodes:
+    - data:
+        selected: false
+        title: 画像アップロード
+        type: start
+        variables:
+        - allowed_file_extensions: []
+          allowed_file_types:
+          - image
+          - document
+          allowed_file_upload_methods:
+          - local_file
+          - remote_url
+          default: ''
+          hint: ''
+          label: ファイルをアップロードしてください
+          max_length: 48
+          options: []
+          placeholder: ''
+          required: true
+          type: file
+          variable: input_file
+      height: 109
+      id: '1769955924804'
+      position:
+        x: -20
+        y: 200
+      positionAbsolute:
+        x: -20
+        y: 200
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        default_value:
+        - key: text
+          type: string
+          value: 解析に失敗しました
+        error_strategy: default-value
+        model:
+          completion_params:
+            temperature: 0.7
+          mode: chat
+          name: gemini-2.5-flash
+          provider: langgenius/gemini/google
+        prompt_template:
+        - id: f4de0f69-a9b4-4cf0-96ef-b0fb1e49dc58
+          role: system
+          text: "あなたはマーケティング資料や広告画像を解析するアナリストです。\n\nユーザーがアップロードした画像を解析し、以下3項目を日本語で抽出してください。\n\
+            \n1. 商品名/サービス名\n2. メインメッセージ\n3. その他の情報\n\n## 必ず次のルールに従ってください。\n- 画像の中に直接書かれているテキストや、ロゴ・レイアウトから推測できる範囲で情報をまとめる。\n\
+            \n- 分からない項目は無理に推測せず「不明」と記載する。\n- 出力は Google スプレッドシートにそのまま貼り付けられるよう、JSON形式で返す。\n\
+            \n- 出力フォーマットは厳守してください:\n{\n  \"product_or_service_name\": \"ここに商品名/サービス名\"\
+            ,\n  \"main_message\": \"ここにメインメッセージ\",\n  \"other_information\": \"ここにその他の情報（補足・注意書き・割引情報など）\"\
+            \n}"
+        selected: false
+        structured_output:
+          schema:
+            properties:
+              main_message:
+                description: 最も強調されているキャッチコピーやメインの訴求文。
+                type: string
+              other_information:
+                description: 補足情報、注意書き、割引、著者名など、上記以外の重要なテキスト。
+                type: string
+              product_or_service_name:
+                description: 画像から抽出した商品名またはサービス名。ロゴやタイトルから判断してください。
+                type: string
+            required:
+            - product_or_service_name
+            - main_message
+            type: object
+        structured_output_enabled: true
+        title: LLM
+        type: llm
+        vision:
+          configs:
+            detail: high
+            variable_selector:
+            - '1769955924804'
+            - input_file
+          enabled: true
+      height: 124
+      id: '1769956037851'
+      position:
+        x: 273.0349924997048
+        y: 221
+      positionAbsolute:
+        x: 273.0349924997048
+        y: 221
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        author: nagatetsu08
+        desc: ''
+        height: 88
+        selected: false
+        showAuthor: true
+        text: '{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"コンテキストはナレッジベースを利用する時以外は指定しなくても問題なし","type":"text","version":1}],"direction":null,"format":"","indent":0,"type":"paragraph","version":1,"textFormat":0,"textStyle":""}],"direction":null,"format":"","indent":0,"type":"root","version":1}}'
+        theme: blue
+        title: ''
+        type: ''
+        width: 240
+      height: 88
+      id: '1769956368934'
+      position:
+        x: 286
+        y: 71
+      positionAbsolute:
+        x: 286
+        y: 71
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom-note
+      width: 240
+    - data:
+        author: nagatetsu08
+        desc: ''
+        height: 143
+        selected: false
+        showAuthor: true
+        text: '{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"スプレッドシートへの書き込みは汎用性にかけるし、めちゃくちゃやりにくい。もしドキュメントへ追記する要件がでた場合は、webhookでn8nへ渡して処理した方がいい。ここでは一旦JSON形式で出力","type":"text","version":1}],"direction":null,"format":"","indent":0,"type":"paragraph","version":1,"textFormat":0,"textStyle":""}],"direction":null,"format":"","indent":0,"type":"root","version":1}}'
+        theme: blue
+        title: ' (1)'
+        type: ''
+        width: 301
+      height: 143
+      id: '17699596807320'
+      position:
+        x: 624.7164968721787
+        y: 40.10204853701785
+      positionAbsolute:
+        x: 624.7164968721787
+        y: 40.10204853701785
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom-note
+      width: 301
+    - data:
+        code: "\nimport json\n\ndef main(arg1: dict, arg2: dict):\n    # arg1(LLMの出力)が文字列の場合は辞書に変換\n\
+          \    if isinstance(arg1, str):\n        try:\n            answer_data =\
+          \ json.loads(arg1)\n        except:\n            answer_data = {\"raw_text\"\
+          : arg1}\n    else:\n        answer_data = arg1\n\n    # 最終的なJSON構造を作成\n\
+          \    result = {\n        \"data\": answer_data,\n        \"metadata\": {\n\
+          \            \"usage\": arg2,  # トークン数\n            \"source\": \"Dify-Workflow\"\
+          \n        }\n    }\n    # return {\n    #     \"result\": result\n    #\
+          \ }\n    return {\n        \"result\": json.dumps(result, ensure_ascii=False)\n\
+          \    }"
+        code_language: python3
+        outputs:
+          result:
+            children: null
+            type: string
+        selected: false
+        title: code_execute
+        type: code
+        variables:
+        - value_selector:
+          - '1769956037851'
+          - structured_output
+          value_type: object
+          variable: arg1
+        - value_selector:
+          - '1769956037851'
+          - usage
+          value_type: object
+          variable: arg2
+      height: 52
+      id: '1769962718518'
+      position:
+        x: 575.0349924997048
+        y: 221
+      positionAbsolute:
+        x: 575.0349924997048
+        y: 221
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        authorization:
+          config: null
+          type: no-auth
+        body:
+          data:
+          - id: key-value-979
+            key: ''
+            type: text
+            value: "{\n    \"result\": {{#1769962718518.result#}}\n}"
+          type: json
+        headers: ''
+        method: post
+        params: ''
+        retry_config:
+          max_retries: 3
+          retry_enabled: true
+          retry_interval: 100
+        selected: true
+        ssl_verify: true
+        timeout:
+          max_connect_timeout: 0
+          max_read_timeout: 0
+          max_write_timeout: 0
+        title: HTTP リクエスト
+        type: http-request
+        url: https://XXXXXXX.example.com/webhook-test/write-imageinfo
+        variables: []
+      height: 153
+      id: '1770125405741'
+      position:
+        x: 949.0407719956119
+        y: 221
+      positionAbsolute:
+        x: 949.0407719956119
+        y: 221
+      selected: true
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    viewport:
+      x: -275.4260716143267
+      y: 111.9721071060579
+      zoom: 0.8428881385698592
+  rag_pipeline_variables: []

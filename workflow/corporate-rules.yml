@@ -1,0 +1,492 @@
+app:
+  description: 経費、就業規則についてなんでも聞いてね
+  icon: 🤖
+  icon_background: '#FFEAD5'
+  mode: advanced-chat
+  name: 規定集チャット
+  use_icon_as_answer_icon: false
+dependencies:
+- current_identifier: null
+  type: marketplace
+  value:
+    marketplace_plugin_unique_identifier: langgenius/gemini:0.7.4@5faf411e694e0da130a337347a625a3812b1b7502a0183382d66d92c841bf05a
+    version: null
+kind: app
+version: 0.5.0
+workflow:
+  conversation_variables: []
+  environment_variables: []
+  features:
+    file_upload:
+      allowed_file_extensions:
+      - .JPG
+      - .JPEG
+      - .PNG
+      - .GIF
+      - .WEBP
+      - .SVG
+      allowed_file_types:
+      - image
+      allowed_file_upload_methods:
+      - local_file
+      - remote_url
+      enabled: false
+      fileUploadConfig:
+        attachment_image_file_size_limit: 2
+        audio_file_size_limit: 50
+        batch_count_limit: 5
+        file_size_limit: 15
+        file_upload_limit: 20
+        image_file_batch_limit: 10
+        image_file_size_limit: 10
+        single_chunk_attachment_limit: 10
+        video_file_size_limit: 100
+        workflow_file_upload_limit: 10
+      image:
+        enabled: false
+        number_limits: 3
+        transfer_methods:
+        - local_file
+        - remote_url
+      number_limits: 3
+    opening_statement: ''
+    retriever_resource:
+      enabled: false
+    sensitive_word_avoidance:
+      enabled: false
+    speech_to_text:
+      enabled: false
+    suggested_questions: []
+    suggested_questions_after_answer:
+      enabled: false
+    text_to_speech:
+      enabled: false
+      language: ''
+      voice: ''
+  graph:
+    edges:
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: start
+        targetType: if-else
+      id: 1769869967261-source-1769870100027-target
+      source: '1769869967261'
+      sourceHandle: source
+      target: '1769870100027'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: if-else
+        targetType: knowledge-retrieval
+      id: 1769870100027-true-1769870163968-target
+      source: '1769870100027'
+      sourceHandle: 'true'
+      target: '1769870163968'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: if-else
+        targetType: knowledge-retrieval
+      id: 1769870100027-10dfadb2-42fe-4b8c-a187-5f26d1aad137-1769870270944-target
+      source: '1769870100027'
+      sourceHandle: 10dfadb2-42fe-4b8c-a187-5f26d1aad137
+      target: '1769870270944'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: if-else
+        targetType: answer
+      id: 1769870100027-false-1769870464516-target
+      source: '1769870100027'
+      sourceHandle: 'false'
+      target: '1769870464516'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: knowledge-retrieval
+        targetType: llm
+      id: 1769870163968-source-1769870785135-target
+      source: '1769870163968'
+      sourceHandle: source
+      target: '1769870785135'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: knowledge-retrieval
+        targetType: llm
+      id: 1769870270944-source-17698713480800-target
+      source: '1769870270944'
+      sourceHandle: source
+      target: '17698713480800'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: llm
+        targetType: answer
+      id: 1769870785135-source-1769871542261-target
+      source: '1769870785135'
+      sourceHandle: source
+      target: '1769871542261'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: llm
+        targetType: answer
+      id: 17698713480800-source-17698716040350-target
+      source: '17698713480800'
+      sourceHandle: source
+      target: '17698716040350'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    nodes:
+    - data:
+        selected: false
+        title: ユーザー入力
+        type: start
+        variables:
+        - hint: ''
+          label: 確認したい項目をリストから選択してください
+          max_length: 48
+          options:
+          - 1.就業規則
+          - 2.経費精算
+          placeholder: ''
+          required: true
+          type: select
+          variable: user_input
+      height: 109
+      id: '1769869967261'
+      position:
+        x: 28.46861658823167
+        y: 273.024153791444
+      positionAbsolute:
+        x: 28.46861658823167
+        y: 273.024153791444
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        cases:
+        - case_id: 'true'
+          conditions:
+          - comparison_operator: contains
+            id: 31d965d4-97f9-486e-be5e-e34f4184e3dd
+            value: '1'
+            varType: string
+            variable_selector:
+            - '1769869967261'
+            - user_input
+          id: 'true'
+          logical_operator: and
+        - case_id: 10dfadb2-42fe-4b8c-a187-5f26d1aad137
+          conditions:
+          - comparison_operator: contains
+            id: 0c89119d-bd81-4d84-9a96-b2aa590d89b7
+            value: '2'
+            varType: string
+            variable_selector:
+            - '1769869967261'
+            - user_input
+          id: 10dfadb2-42fe-4b8c-a187-5f26d1aad137
+          logical_operator: and
+        selected: false
+        title: IF/ELSE
+        type: if-else
+      height: 172
+      id: '1769870100027'
+      position:
+        x: 353
+        y: 272
+      positionAbsolute:
+        x: 353
+        y: 272
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        dataset_ids:
+        - DUMMY_DATASET_ID_WORK_RULES_001
+        metadata_filtering_mode: disabled
+        multiple_retrieval_config:
+          reranking_enable: false
+          reranking_mode: weighted_score
+          top_k: 4
+          weights:
+            keyword_setting:
+              keyword_weight: 0
+            vector_setting:
+              embedding_model_name: gemini-embedding-001
+              embedding_provider_name: langgenius/gemini/google
+              vector_weight: 1
+            weight_type: customized
+        query_attachment_selector: []
+        query_variable_selector:
+        - '1769869967261'
+        - sys.query
+        retrieval_mode: multiple
+        selected: false
+        title: 知識検索 - 就業規則
+        type: knowledge-retrieval
+      height: 90
+      id: '1769870163968'
+      position:
+        x: 653
+        y: 195.29619010736718
+      positionAbsolute:
+        x: 653
+        y: 195.29619010736718
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        dataset_ids:
+        - DUMMY_DATASET_ID_EXPENSES_002
+        multiple_retrieval_config:
+          reranking_enable: false
+          reranking_mode: weighted_score
+          top_k: 4
+          weights:
+            keyword_setting:
+              keyword_weight: 0
+            vector_setting:
+              embedding_model_name: gemini-embedding-001
+              embedding_provider_name: langgenius/gemini/google
+              vector_weight: 1
+            weight_type: customized
+        query_attachment_selector: []
+        query_variable_selector:
+        - '1769869967261'
+        - sys.query
+        retrieval_mode: multiple
+        selected: false
+        title: 知識検索 - 経費精算
+        type: knowledge-retrieval
+      height: 90
+      id: '1769870270944'
+      position:
+        x: 653
+        y: 316.95063498210544
+      positionAbsolute:
+        x: 653
+        y: 316.95063498210544
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        answer: リストから選択してください。
+        selected: false
+        title: 回答
+        type: answer
+        variables: []
+      height: 100
+      id: '1769870464516'
+      position:
+        x: 668.2203470512246
+        y: 453.59027899438195
+      positionAbsolute:
+        x: 668.2203470512246
+        y: 453.59027899438195
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        context:
+          enabled: true
+          variable_selector:
+          - '1769870163968'
+          - result
+        memory:
+          query_prompt_template: '{{#sys.query#}}'
+          role_prefix:
+            assistant: ''
+            user: ''
+          window:
+            enabled: false
+            size: 50
+        model:
+          completion_params:
+            temperature: 0.7
+          mode: chat
+          name: gemini-2.5-flash
+          provider: langgenius/gemini/google
+        prompt_template:
+        - id: 6518be10-a079-49b1-a9c9-fcee47a4d05b
+          role: system
+          text: 'あなたは、就業規則に関する質問に回答する社内向けアシスタントです。
+
+
+            {{#context#}}を基に、以下の回答条件に沿って正確かつ簡潔に回答してください。
+
+
+            ## 回答条件
+
+            1. 回答は必ず日本語で行ってください。
+
+            2.該当する情報がない場合、あるいは情報が不足していて正確な回答ができない場合は、回答できないことを丁寧に伝え、必ず次の文言で終わってください：
+
+            「担当者へ直接確認してください。」
+
+            3.回答できる場合は、出典情報を明記すること。出典を表示する際は文書名を表示してください。
+
+            4. 回答できる場合でも、回答文の最後には必ず次の文言を付けてください：
+
+            「詳細については担当者へ確認してください。」
+
+            5. 回答できないときは引用は表示しないでください'
+        selected: true
+        title: LLM - 就業規則
+        type: llm
+        vision:
+          enabled: false
+      height: 88
+      id: '1769870785135'
+      position:
+        x: 955
+        y: 189
+      positionAbsolute:
+        x: 955
+        y: 189
+      selected: true
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        context:
+          enabled: true
+          variable_selector:
+          - '1769870270944'
+          - result
+        memory:
+          query_prompt_template: '{{#sys.query#}}'
+          role_prefix:
+            assistant: ''
+            user: ''
+          window:
+            enabled: false
+            size: 50
+        model:
+          completion_params:
+            temperature: 0.7
+          mode: chat
+          name: gemini-2.5-flash
+          provider: langgenius/gemini/google
+        prompt_template:
+        - id: 6518be10-a079-49b1-a9c9-fcee47a4d05b
+          role: system
+          text: 'あなたは、経費精算に関する質問に回答する社内向けアシスタントです。
+
+
+            {{#context#}}を基に、以下の回答条件に沿って正確かつ簡潔に回答してください。
+
+
+            ## 回答条件
+
+            1. 回答は必ず日本語で行ってください。
+
+            2.該当する情報がない場合、あるいは情報が不足していて正確な回答ができない場合は、回答できないことを丁寧に伝え、必ず次の文言で終わってください：
+
+            「担当者へ直接確認してください。」
+
+            3. 回答できる場合でも、回答文の最後には必ず次の文言を付けてください：
+
+            「詳細については担当者へ確認してください。」
+
+            4. 回答できないときは引用は表示しないでください'
+        selected: false
+        title: LLM - 経費精算
+        type: llm
+        vision:
+          enabled: false
+      height: 88
+      id: '17698713480800'
+      position:
+        x: 955
+        y: 316.95063498210544
+      positionAbsolute:
+        x: 955
+        y: 316.95063498210544
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        answer: '===就業規則===
+
+          {{#1769870785135.text#}}'
+        selected: false
+        title: 回答 - 就業規則
+        type: answer
+        variables: []
+      height: 119
+      id: '1769871542261'
+      position:
+        x: 1244.7101545026717
+        y: 189
+      positionAbsolute:
+        x: 1244.7101545026717
+        y: 189
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        answer: '===経費精算===
+
+          {{#17698713480800.text#}}
+
+          '
+        selected: false
+        title: 回答 - 経費精算
+        type: answer
+        variables: []
+      height: 119
+      id: '17698716040350'
+      position:
+        x: 1244.7101545026717
+        y: 316.95063498210544
+      positionAbsolute:
+        x: 1244.7101545026717
+        y: 316.95063498210544
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    viewport:
+      x: 44.54857705625318
+      y: 60.982862833136615
+      zoom: 0.5304614531332511
+  rag_pipeline_variables: []
